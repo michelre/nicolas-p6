@@ -5,7 +5,7 @@ const fetchPhotographer = async(photographerId) => {
 }
 
 const fetchMedia = async (photographerId) => {
-    return fetch('../../data/photographers.json')
+    return fetch('data/photographers.json')
         .then((res) => res.json())
         .then(({media}) => media.filter(m => m.photographerId === photographerId))
 }
