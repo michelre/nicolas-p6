@@ -79,10 +79,26 @@ form input {
     width: 350px;
     height: 350px;
     object-fit: cover;
+   
 }
 
 #gallery {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+}
+
+#gallery img {
+    margin-bottom: 85px; 
+}
+
+
+#gallery img:nth-child(1),
+#gallery img:nth-child(3),
+#gallery img:nth-child(7) {
+    object-position: center top;
+}
+
+#gallery img[src="assets/media/925/Fashion_Wings.jpg"] {
+    object-position: center top;
 }
