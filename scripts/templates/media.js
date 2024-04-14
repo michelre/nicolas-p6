@@ -38,7 +38,7 @@ class MediaVideo {
         const video = document.createElement('video')
         const src = document.createElement('source')
         video.setAttribute('controls', '')
-        src.setAttribute('src', `assets/media/82${this.media.photographerId}/${this.media.video}`)
+        src.setAttribute('src', `assets/media/${this.media.photographerId}/${this.media.video}`)
         video.appendChild(src)
 
         return video
