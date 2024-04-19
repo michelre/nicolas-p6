@@ -53,4 +53,9 @@ h1 {
 
 .photographer_section a {
     text-decoration: none;
+    place-self: center;
+}
+
+.photographer_section p {
+    text-align-last: center;
 }

@@ -10,12 +10,26 @@ async function displayData(photographers) {
     photographers.forEach((photographer) => {
         const photographerModel = photographerTemplate(photographer);
         const userCardDOM = photographerModel.getUserCardDOM();
+
+        const locationParagraph = document.createElement('p');
+        locationParagraph.textContent = `${photographer.city}, ${photographer.country}`;
+        userCardDOM.appendChild(locationParagraph);
+
+
+        const taglineParagraph = document.createElement('p');
+        taglineParagraph.textContent = photographer.tagline;
+        userCardDOM.appendChild(taglineParagraph);
+
+        
+        const priceParagraph = document.createElement('p');
+        priceParagraph.textContent = `Price: ${photographer.price} €`;
+        userCardDOM.appendChild(priceParagraph);
+
         photographersSection.appendChild(userCardDOM);
     });
 }
 
 async function init() {
-    // Récupère les datas des photographes
     const { photographers } = await getPhotographers();
     displayData(photographers);
 }
