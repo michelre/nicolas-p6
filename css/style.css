@@ -42,6 +42,7 @@ h1 {
 .photographer_section article h2 {
     color: #D3573C;
     font-size: 36px;
+    margin: 0;
 }
 
 .photographer_section article img {
@@ -58,4 +59,5 @@ h1 {
 
 .photographer_section p {
     text-align-last: center;
+    margin: 0;
 }

@@ -1,4 +1,3 @@
-
 const fetchPhotographer = async(photographerId) => {
     return fetch('data/photographers.json')
         .then((res) => res.json())
@@ -51,6 +50,15 @@ const displayPhotographerInfo = (photographer) => {
     location.appendChild(comma);
 };
 
+const displayTotalLikes = (totalLikes) => {
+    console.log(totalLikes)
+    // HTML de la barre du bas
+}
+
+const totalLikes = (media) => {
+    return media.reduce((acc, m) => m.likes + acc, 0)
+}
+
 const init = async () => {
     let params = new URL(document.location.toString()).searchParams;
     let id = params.get("id");
@@ -58,6 +66,7 @@ const init = async () => {
     const photographer = await fetchPhotographer(parseInt(id));
     displayGallery(media); 
     displayPhotographerInfo(photographer); 
+    displayTotalLikes(totalLikes(media))
     console.log(media, photographer);
 };
 
