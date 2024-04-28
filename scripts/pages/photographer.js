@@ -54,7 +54,6 @@ const displayGallery = (media) => {
     const likes = document.createElement("p");
     likes.innerHTML = `${element.likes} <i class="heart heart-empty far fa-heart"></i><i class="heart heart-full fas fa-heart hide"></i> `; 
 
-    // Ajout de l'événement click sur l'icône de cœur
     likes.querySelector(".heart").addEventListener("click", () => {
       const emptyHeartIcon = likes.querySelector(".heart-empty");
       const filledHeartIcon = likes.querySelector(".heart-full");
@@ -73,7 +72,7 @@ const displayGallery = (media) => {
           element.likes--;
         }
       }
-      // Met à jour l'affichage du nombre total de likes
+   
       displayTotalLikes(totalLikes(media));
     });
 
