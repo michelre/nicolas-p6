@@ -14,37 +14,14 @@ const fetchMedia = async (photographerId) => {
     );
 };
 
-const displayGallery = (media) => {
-    const gallery = document.querySelector("#gallery");
-    media.forEach((element) => {
-      const mediaObj = new Media(element);
-      const mediaDOM = mediaObj.getMediaDOM();
-  
-      
-      const title = document.createElement("p");
-      title.textContent = element.title;
-  
-      
-      const likes = document.createElement("p");
-      likes.textContent = `${element.likes} likes`;
-  
-      
-      mediaDOM.appendChild(title);
-      mediaDOM.appendChild(likes);
-      gallery.appendChild(mediaDOM);
-    });
-  };
-
 const displayPhotographerInfo = (photographer) => {
   const header = document.querySelector(".photograph-header");
   const namePhotographer = document.querySelector("#namePhotographer");
-  
 
   const name = document.createElement("h2");
   name.textContent = photographer.name;
   namePhotographer.appendChild(name);
-  
-  
+
   const location = document.createElement("h3");
   location.textContent = `${photographer.city}, ${photographer.country}`;
   namePhotographer.appendChild(location);
@@ -52,13 +29,62 @@ const displayPhotographerInfo = (photographer) => {
   const tagline = document.createElement("p");
   tagline.textContent = photographer.tagline;
   namePhotographer.appendChild(tagline);
-  
 
   const img = document.createElement("img");
   img.src = `assets/photographers/${photographer.portrait}`;
   img.alt = photographer.name;
   header.appendChild(img);
-  
+};
+
+const displayGallery = (media) => {
+  const gallery = document.querySelector("#gallery");
+  media.forEach((element) => {
+    const mediaObj = new Media(element);
+    const mediaDOM = mediaObj.getMediaDOM();
+
+    const mediaContainer = document.createElement("div");
+    mediaContainer.classList.add("media-container");
+
+    const infoContainer = document.createElement("div");
+    infoContainer.classList.add("info-container");
+
+    const title = document.createElement("p");
+    title.textContent = element.title;
+
+    const likes = document.createElement("p");
+    likes.innerHTML = `${element.likes} <i class="heart heart-empty far fa-heart"></i><i class="heart heart-full fas fa-heart hide"></i> `; 
+
+    // Ajout de l'événement click sur l'icône de cœur
+    likes.querySelector(".heart").addEventListener("click", () => {
+      const emptyHeartIcon = likes.querySelector(".heart-empty");
+      const filledHeartIcon = likes.querySelector(".heart-full");
+      const emptyHeartOpacity = window.getComputedStyle(emptyHeartIcon).opacity;
+
+      if (parseFloat(emptyHeartOpacity) !== 0) {
+        emptyHeartIcon.style.opacity = "0";
+        filledHeartIcon.style.opacity = "1";
+        likes.childNodes[0].textContent = parseInt(likes.childNodes[0].textContent) + 1;
+        element.likes++;
+      } else {
+        emptyHeartIcon.style.opacity = "1";
+        filledHeartIcon.style.opacity = "0";
+        if (parseInt(likes.childNodes[0].textContent) > 0) {
+          likes.childNodes[0].textContent = parseInt(likes.childNodes[0].textContent) - 1;
+          element.likes--;
+        }
+      }
+      // Met à jour l'affichage du nombre total de likes
+      displayTotalLikes(totalLikes(media));
+    });
+
+    infoContainer.appendChild(title);
+    infoContainer.appendChild(likes);
+
+    mediaContainer.appendChild(mediaDOM);
+    mediaContainer.appendChild(infoContainer);
+
+    gallery.appendChild(mediaContainer);
+  });
 };
 
 const displayTotalLikes = (totalLikes) => {
@@ -67,7 +93,13 @@ const displayTotalLikes = (totalLikes) => {
 };
 
 const totalLikes = (media) => {
-  return media.reduce((acc, m) => m.likes + acc, 0);
+  let total = 0;
+
+  media.forEach((element) => {
+    total += element.likes;
+  });
+
+  return total;
 };
 
 const init = async () => {
