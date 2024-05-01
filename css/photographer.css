@@ -67,21 +67,6 @@
   margin: auto;
 }
 
-.modal header {
-  justify-content: space-between;
-  width: 100%;
-}
-
-.modal header img {
-  cursor: pointer;
-}
-
-.modal header h2 {
-  font-size: 64px;
-  font-weight: normal;
-  text-align: center;
-}
-
 form {
   display: flex;
   width: 100%;
@@ -107,6 +92,13 @@ form input {
   height: 68px;
   border: none;
   border-radius: 5px;
+  align-self: center;
+  
+  margin: 0;
+}
+
+.form-input-marge {
+  margin-top: 45px;
 }
 
 #gallery img,
@@ -149,19 +141,17 @@ form input {
 }
 
 .info-container .heart {
-    font-size: 23px;
-    margin-left: 5px;
-    position: absolute; 
-    
-  }
+  font-size: 23px;
+  margin-left: 5px;
+  position: absolute;
+}
 
-.info-container i:hover{
-    cursor: pointer;
-    
-  }
+.info-container i:hover {
+  cursor: pointer;
+}
 .heart-full {
-    opacity : 0 ;
-    pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -181,7 +171,7 @@ form input {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: #DB8876;
+  background-color: #db8876;
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -193,14 +183,115 @@ form input {
 
 .likes-container {
   display: flex;
-  align-items: center; 
+  align-items: center;
 }
 
 .likes-container i {
-  margin-left: 5px; 
+  margin-left: 5px;
 }
 
 .info-bar {
   display: flex;
-  justify-content: space-around; 
+  justify-content: space-around;
 }
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown select {
+  background-color: #901c1c;
+  color: white;
+  padding: 16px;
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  padding-right: 30px;
+  width: 160px;
+  font-size: 20px;
+  border-radius: 8px 8px 8px 8px;
+}
+
+.dropdown i {
+  position: absolute;
+  top: 50%;
+  right: 12px; /* Ajustez selon votre préférence */
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #fafafa;
+  font-size: 20px;
+}
+.sorting-container {
+  display: flex;
+  align-items: center;
+  margin-left: 110px;
+  margin-bottom: 50px;
+}
+
+.sort-by {
+  font-size: 20px;
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+/* Style de la modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #d3573c; /* Couleur de fond de la modal */
+  padding: 20px;
+  border-radius: 10px;
+  z-index: 1001;
+  width: 50%;
+  height: 870px;
+}
+
+/* Style du contenu de la modal */
+.modal .content {
+  color: white;
+}
+
+/* Style du bouton de fermeture */
+.modal header img {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+.button-container {
+  background-color: #901c1c;
+  padding: 19px;
+  border-radius: 5px;
+  text-align: center;
+  width: 13%;
+}
+
+.button-container button {
+  background-color: inherit;
+  border: none;
+  color: white;
+  cursor: pointer;
+  align-self: center;
+}
+
+#message-input {
+  height: 165px;
+}
+
+.info-form h2 {
+  font-size: 55px;
+  font-weight: normal;
+  margin: 0;
+}
+
+.info-form h3 {
+  font-size: 50px;
+  font-weight: normal;
+  margin: 0;
+ 
+}
+

@@ -1,62 +1,89 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
-    <link
-      href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <title>Fisheye - photographe</title>
-  </head>
-  <body>
-    <header>
-      <img src="assets/images/logo.png" class="logo" />
+<head>
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link
+    href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap"
+    rel="stylesheet"
+  />
+  <title>Fisheye - photographe</title>
+</head>
+<body>
+  <header>
+    <img src="assets/images/logo.png" class="logo" />
+  </header>
+  <main id="main">
+    <div class="photograph-header">
+      <div id="namePhotographer"></div>
+      <button class="contact_button">Contactez-moi</button>
+      <div class="photographer-info">
+        <p class="tagline"></p>
+        <p class="price"></p>
+      </div>
+    </div>
+    <div class="sorting-container">
+      <div class="sort-by">Trier par</div>
+      <div class="dropdown">
+        <select id="sorting">
+          <option value="popularity">Popularité</option>
+          <option value="date">Date</option>
+          <option value="title">Titre</option>
+        </select>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+    </div>
+    <div id="gallery" class="container"></div>
+  </main>
+  <div class="modal" id="contact_modal">
+    <header class="header-form">
+      <div class="info-form">
+        <h2>Contactez-moi</h2>
+        <img src="assets/icons/close.svg" onclick="closeModal()" />
+      </div>
     </header>
-    <main id="main">
-      <div class="photograph-header">
-        <div id="namePhotographer"></div>
-        <button class="contact_button" onclick="displayModal()">
-          Contactez-moi
-        </button>
+    <form>
+      <div class="form-input-marge">
+        <label for="first_name">Prénom</label>
+        <input type="text" id="first_name" name="first_name" />
       </div>
-      <div id="gallery" class="container"></div>
-    </main>
-    <div id="contact_modal">
-      <div class="modal">
-        <header>
-          <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" />
-        </header>
-        <form>
-          <div>
-            <label>Prénom</label>
-            <input />
-          </div>
-          <button class="contact_button">Envoyer</button>
-        </form>
+      <div>
+        <label for="last_name">Nom</label>
+        <input type="text" id="last_name" name="last_name" />
       </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" />
+      </div>
+      <div>
+        <label for="email">Votre message</label>
+        <input type="email" id="message-input" name="email" />
+      </div>
+      <div class="button-container">
+        <button type="submit">Envoyer</button>
+      </div>
+    </form>
+  </div>
+  <div id="infoWindow" class="info-window">
+    <div class="info-bar">
+      <div class="likes-container">
+        <div id="totalLikes"></div>
+        <i class="fa-solid fa-heart"></i>
+      </div>
+      <div id="pricePerDay"></div>
     </div>
-    <div id="infoWindow" class="info-window">
-      <div class="info-bar">
-        <div class="likes-container">
-          <div id="totalLikes"></div>
-          <i class="fa-solid fa-heart"></i>
-        </div>
-        <div id="pricePerDay"></div>
-      </div>
-    </div>
-    <script src="scripts/templates/media.js"></script>
-    <script src="scripts/pages/photographer.js"></script>
-    <script src="scripts/utils/contactForm.js"></script>
-  </body>
+  </div>
+  <script src="scripts/templates/media.js"></script>
+  <script src="scripts/pages/photographer.js"></script>
+  <script src="scripts/utils/contactForm.js"></script>
+</body>
 </html>
