@@ -61,3 +61,17 @@ h1 {
     text-align-last: center;
     margin: 0;
 }
+
+.photographer_section h4 {
+    text-align-last: center;
+    margin: 0;
+    color: #901C1C;
+}
+
+.p1 {
+    color: black;
+}
+
+.p2 {
+    color: #525252;
+}
