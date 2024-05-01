@@ -150,12 +150,11 @@ form input {
 
 .info-container .heart {
     font-size: 23px;
-    margin-left: 5px; 
-    m
+    margin-left: 5px;
+    position: absolute; 
+    
   }
-.info-container i {
-  position: absolute;
-}
+
 .info-container i:hover{
     cursor: pointer;
     
@@ -176,4 +175,32 @@ form input {
   #gallery {
     grid-template-columns: 1fr 1fr 1fr;
   }
+}
+
+.info-window {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #DB8876;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  width: 16%;
+  color: black;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.likes-container {
+  display: flex;
+  align-items: center; 
+}
+
+.likes-container i {
+  margin-left: 5px; 
+}
+
+.info-bar {
+  display: flex;
+  justify-content: space-around; 
 }

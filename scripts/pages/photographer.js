@@ -87,8 +87,8 @@ const displayGallery = (media) => {
 };
 
 const displayTotalLikes = (totalLikes) => {
-  console.log(totalLikes);
-  // HTML de la barre du bas
+  const totalLikesElement = document.getElementById("totalLikes");
+  totalLikesElement.innerHTML = `${totalLikes}`;
 };
 
 const totalLikes = (media) => {
@@ -101,15 +101,28 @@ const totalLikes = (media) => {
   return total;
 };
 
+const displayInfoWindow = (totalLikes, pricePerDay) => {
+  const infoWindow = document.getElementById("infoWindow");
+  const totalLikesElement = document.getElementById("totalLikes");
+  const pricePerDayElement = document.getElementById("pricePerDay");
+
+  totalLikesElement.textContent = totalLikes;
+  pricePerDayElement.textContent = `${pricePerDay}€ / jour`;
+
+  infoWindow.style.display = "block";
+};
+
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
   const media = await fetchMedia(parseInt(id));
   const photographer = await fetchPhotographer(parseInt(id));
+  const totalLikesValue = totalLikes(media);
+  const pricePerDayValue = photographer.price; 
   displayGallery(media);
   displayPhotographerInfo(photographer);
-  displayTotalLikes(totalLikes(media));
-  console.log(media, photographer);
+  displayTotalLikes(totalLikesValue);
+  displayInfoWindow(totalLikesValue, pricePerDayValue);
 };
 
 init();
