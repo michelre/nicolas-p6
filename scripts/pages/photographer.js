@@ -1,3 +1,4 @@
+// Fonction pour récupérer les données d'un photographe à partir de son identifiant
 const fetchPhotographer = async (photographerId) => {
   return fetch("data/photographers.json")
     .then((res) => res.json())
@@ -6,6 +7,7 @@ const fetchPhotographer = async (photographerId) => {
     );
 };
 
+// Fonction pour récupérer les médias d'un photographe à partir de son identifiant
 const fetchMedia = async (photographerId) => {
   return fetch("data/photographers.json")
     .then((res) => res.json())
@@ -14,6 +16,7 @@ const fetchMedia = async (photographerId) => {
     );
 };
 
+// Fonction pour afficher les informations d'un photographe
 const displayPhotographerInfo = (photographer) => {
   const header = document.querySelector(".photograph-header");
   const namePhotographer = document.querySelector("#namePhotographer");
@@ -36,6 +39,7 @@ const displayPhotographerInfo = (photographer) => {
   header.appendChild(img);
 };
 
+// Fonction pour afficher la galerie de médias
 const displayGallery = (media) => {
   const gallery = document.querySelector("#gallery");
   media.forEach((element) => {
@@ -88,11 +92,13 @@ const displayGallery = (media) => {
   });
 };
 
+// Fonction pour afficher le nombre total de likes
 const displayTotalLikes = (totalLikes) => {
   const totalLikesElement = document.getElementById("totalLikes");
   totalLikesElement.innerHTML = `${totalLikes}`;
 };
 
+// Fonction pour calculer le nombre total de likes
 const totalLikes = (media) => {
   let total = 0;
 
@@ -103,6 +109,7 @@ const totalLikes = (media) => {
   return total;
 };
 
+// Fonction pour afficher la fenêtre d'informations
 const displayInfoWindow = (totalLikes, pricePerDay) => {
   const infoWindow = document.getElementById("infoWindow");
   const totalLikesElement = document.getElementById("totalLikes");
@@ -120,6 +127,7 @@ const modal = document.getElementById("contact_modal");
 // Variable pour suivre si le nom du photographe a déjà été ajouté à la modal
 let photographerNameAdded = false;
 
+// Fonction pour afficher la modal
 function displayModal() {
   // Vérifier si le nom du photographe a déjà été ajouté à la modal
   if (!photographerNameAdded) {
@@ -135,7 +143,7 @@ function displayModal() {
         // Ajouter le nom du photographe à l'élément h3
         photographerNameElement.textContent = photographer.name;
 
-        // Récupérer le div avec la classe 'test'
+        // Récupérer le div avec la classe 'info-form'
         const testDiv = document.querySelector(".info-form");
         // Ajouter l'élément h3 à ce div
         testDiv.appendChild(photographerNameElement);
@@ -163,6 +171,7 @@ function closeModal() {
 // Ajoutez un écouteur d'événements sur le bouton "Contactez-moi"
 contactButton.addEventListener("click", displayModal);
 
+// Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
@@ -176,4 +185,6 @@ const init = async () => {
   displayInfoWindow(totalLikesValue, pricePerDayValue);
 };
 
+// Appelle la fonction d'initialisation
 init();
+
