@@ -42,6 +42,7 @@ const displayPhotographerInfo = (photographer) => {
 // Fonction pour afficher la galerie de médias
 const displayGallery = (media) => {
   const gallery = document.querySelector("#gallery");
+  gallery.innerHTML = ""; // Clear the gallery before repopulating
   media.forEach((element) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
@@ -78,7 +79,6 @@ const displayGallery = (media) => {
           element.likes--;
         }
       }
-
       displayTotalLikes(totalLikes(media));
     });
 
@@ -95,17 +95,15 @@ const displayGallery = (media) => {
 // Fonction pour afficher le nombre total de likes
 const displayTotalLikes = (totalLikes) => {
   const totalLikesElement = document.getElementById("totalLikes");
-  totalLikesElement.innerHTML = `${totalLikes}`;
+  totalLikesElement.textContent = `${totalLikes}`;
 };
 
 // Fonction pour calculer le nombre total de likes
 const totalLikes = (media) => {
   let total = 0;
-
   media.forEach((element) => {
     total += element.likes;
   });
-
   return total;
 };
 
@@ -138,14 +136,12 @@ function displayModal() {
     // Appeler fetchPhotographer pour récupérer les données du photographe
     fetchPhotographer(parseInt(photographerId))
       .then((photographer) => {
-        // Créer un élément h3 pour afficher le nom du photographe
         const photographerNameElement = document.createElement("h3");
-        // Ajouter le nom du photographe à l'élément h3
+
         photographerNameElement.textContent = photographer.name;
 
-        // Récupérer le div avec la classe 'info-form'
         const testDiv = document.querySelector(".info-form");
-        // Ajouter l'élément h3 à ce div
+
         testDiv.appendChild(photographerNameElement);
 
         // Mettre à jour la variable pour indiquer que le nom du photographe a été ajouté
@@ -171,20 +167,52 @@ function closeModal() {
 // Ajoutez un écouteur d'événements sur le bouton "Contactez-moi"
 contactButton.addEventListener("click", displayModal);
 
+// Écouteur d'événements pour le menu déroulant, triant et mettant à jour
+// la galerie en fonction du critère sélectionné (popularité, titre, date).
+document.getElementById("sorting").addEventListener("change", function () {
+  let params = new URL(document.location.toString()).searchParams;
+  let id = parseInt(params.get("id"));
+  fetchMedia(id)
+    .then((media) => {
+      if (this.value === "popularity") {
+        media.sort((a, b) => b.likes - a.likes);
+      } else if (this.value === "title") {
+        media.sort((a, b) => a.title.localeCompare(b.title));
+      } else if (this.value === "date") {
+        media.sort((a, b) => new Date(b.date) - new Date(a.date));
+      }
+      displayGallery(media);
+      displayTotalLikes(totalLikes(media));
+    })
+    .catch((error) => console.error("Erreur lors du tri des médias", error));
+});
+
+// Fonction pour trier la galerie par popularité
+function sortGalleryByPopularity() {
+  let params = new URL(document.location.toString()).searchParams;
+  let id = parseInt(params.get("id"));
+  fetchMedia(id)
+    .then((media) => {
+      media.sort((a, b) => b.likes - a.likes); // Tri par nombre de likes décroissant
+      displayGallery(media);
+      displayTotalLikes(totalLikes(media)); // Mise à jour du total des likes après le tri
+    })
+    .catch((error) =>
+      console.error("Erreur lors du tri par popularité", error)
+    );
+}
+
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
   const media = await fetchMedia(parseInt(id));
   const photographer = await fetchPhotographer(parseInt(id));
-  const totalLikesValue = totalLikes(media);
-  const pricePerDayValue = photographer.price;
   displayGallery(media);
   displayPhotographerInfo(photographer);
-  displayTotalLikes(totalLikesValue);
-  displayInfoWindow(totalLikesValue, pricePerDayValue);
+  displayTotalLikes(totalLikes(media));
+  displayInfoWindow(totalLikes(media), photographer.price);
 };
 
 // Appelle la fonction d'initialisation
 init();
-
