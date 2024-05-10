@@ -9,8 +9,7 @@
 
 .photograph-header {
   background-color: #fafafa;
-  height: 313px;
-  margin: 40px 100px;
+  padding: 40px 50px;
   display: flex;
   justify-content: space-around;
 }
@@ -131,27 +130,28 @@ form input {
 .info-container {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .info-container p {
   color: #901c1c;
   font-size: 19px;
   font-weight: bold;
-  margin-top: 10px;
+}
+
+.info-container .likes {
+  margin-left: auto;
+  margin-right: 0;
+  padding-right: 10px;
 }
 
 .info-container .heart {
   font-size: 23px;
-  margin-left: 5px;
-  position: absolute;
+  color: #901c1c;
 }
 
 .info-container i:hover {
   cursor: pointer;
-}
-.heart-full {
-  opacity: 0;
-  pointer-events: none;
 }
 
 @media screen and (min-width: 768px) {
@@ -224,8 +224,7 @@ form input {
 .sorting-container {
   display: flex;
   align-items: center;
-  margin-left: 110px;
-  margin-bottom: 50px;
+  margin: 20px 0px;
 }
 
 .sort-by {
@@ -294,4 +293,3 @@ form input {
   margin: 0;
  
 }
-

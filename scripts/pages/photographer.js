@@ -1,3 +1,8 @@
+let maxLikes = 0;
+let media = []
+let sortingOption = 'popularity'
+let mediaLiked = []
+
 // Fonction pour récupérer les données d'un photographe à partir de son identifiant
 const fetchPhotographer = async (photographerId) => {
   return fetch("data/photographers.json")
@@ -42,7 +47,7 @@ const displayPhotographerInfo = (photographer) => {
 // Fonction pour afficher la galerie de médias
 const displayGallery = (media) => {
   const gallery = document.querySelector("#gallery");
-  gallery.innerHTML = ""; // Clear the gallery before repopulating
+  gallery.innerHTML = ""; 
   media.forEach((element) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
@@ -57,33 +62,46 @@ const displayGallery = (media) => {
     title.textContent = element.title;
 
     const likes = document.createElement("p");
-    likes.innerHTML = `${element.likes} <i class="heart heart-empty far fa-heart"></i><i class="heart heart-full fas fa-heart hide"></i> `;
+    likes.classList.add('likes')
+    likes.innerHTML = `${element.likes}`;
 
-    likes.querySelector(".heart").addEventListener("click", () => {
-      const emptyHeartIcon = likes.querySelector(".heart-empty");
-      const filledHeartIcon = likes.querySelector(".heart-full");
-      const emptyHeartOpacity = window.getComputedStyle(emptyHeartIcon).opacity;
+    const heartMedia = document.createElement('i')
+    heartMedia.classList.add('heart', 'fa-heart')
+    if(mediaLiked.includes(element.id)){
+      heartMedia.classList.add("heart-full", "fas")  
+    } else {
+      heartMedia.classList.add("heart-empty", "far")
+    }
+  
 
-      if (parseFloat(emptyHeartOpacity) !== 0) {
-        emptyHeartIcon.style.opacity = "0";
-        filledHeartIcon.style.opacity = "1";
-        likes.childNodes[0].textContent =
-          parseInt(likes.childNodes[0].textContent) + 1;
-        element.likes++;
+    heartMedia.addEventListener("click", () => {
+
+      if(heartMedia.classList.contains('heart-empty')){
+        maxLikes += 1
+        element.likes += 1
+        mediaLiked.push(element.id)      
       } else {
-        emptyHeartIcon.style.opacity = "1";
-        filledHeartIcon.style.opacity = "0";
-        if (parseInt(likes.childNodes[0].textContent) > 0) {
-          likes.childNodes[0].textContent =
-            parseInt(likes.childNodes[0].textContent) - 1;
-          element.likes--;
-        }
+        maxLikes -= 1
+        element.likes -= 1
+        mediaLiked = mediaLiked.filter(id => id !== element.id)
       }
-      displayTotalLikes(totalLikes(media));
+
+      likes.innerHTML = `${element.likes}`;
+      displayTotalLikes(maxLikes)
+
+      heartMedia.classList.toggle('heart-empty')
+      heartMedia.classList.toggle('heart-full')
+      heartMedia.classList.toggle('far')
+      heartMedia.classList.toggle('fas')
+
+      if(sortingOption == 'popularity') {
+        sortMedia('popularity')
+      }
     });
 
     infoContainer.appendChild(title);
     infoContainer.appendChild(likes);
+    infoContainer.appendChild(heartMedia);
 
     mediaContainer.appendChild(mediaDOM);
     mediaContainer.appendChild(infoContainer);
@@ -170,48 +188,39 @@ contactButton.addEventListener("click", displayModal);
 // Écouteur d'événements pour le menu déroulant, triant et mettant à jour
 // la galerie en fonction du critère sélectionné (popularité, titre, date).
 document.getElementById("sorting").addEventListener("change", function () {
-  let params = new URL(document.location.toString()).searchParams;
-  let id = parseInt(params.get("id"));
-  fetchMedia(id)
-    .then((media) => {
-      if (this.value === "popularity") {
-        media.sort((a, b) => b.likes - a.likes);
-      } else if (this.value === "title") {
-        media.sort((a, b) => a.title.localeCompare(b.title));
-      } else if (this.value === "date") {
-        media.sort((a, b) => new Date(b.date) - new Date(a.date));
-      }
-      displayGallery(media);
-      displayTotalLikes(totalLikes(media));
-    })
-    .catch((error) => console.error("Erreur lors du tri des médias", error));
+  
+  sortMedia(this.value)
+    
 });
 
-// Fonction pour trier la galerie par popularité
-function sortGalleryByPopularity() {
-  let params = new URL(document.location.toString()).searchParams;
-  let id = parseInt(params.get("id"));
-  fetchMedia(id)
-    .then((media) => {
-      media.sort((a, b) => b.likes - a.likes); // Tri par nombre de likes décroissant
-      displayGallery(media);
-      displayTotalLikes(totalLikes(media)); // Mise à jour du total des likes après le tri
-    })
-    .catch((error) =>
-      console.error("Erreur lors du tri par popularité", error)
-    );
+const sortMedia = (value) => {
+  if (value === "popularity") {
+    media.sort((a, b) => b.likes - a.likes);
+    sortingOption = 'popularity'
+  } else if (value === "title") {
+    media.sort((a, b) => a.title.localeCompare(b.title));
+    sortingOption = 'title'
+  } else if (value === "date") {
+    media.sort((a, b) => new Date(b.date) - new Date(a.date));
+    sortingOption = 'date'
+  }
+  displayGallery(media);
+  displayTotalLikes(totalLikes(media));
 }
 
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
-  const media = await fetchMedia(parseInt(id));
+  media = await fetchMedia(parseInt(id));
+  sortMedia('popularity')
   const photographer = await fetchPhotographer(parseInt(id));
   displayGallery(media);
   displayPhotographerInfo(photographer);
-  displayTotalLikes(totalLikes(media));
-  displayInfoWindow(totalLikes(media), photographer.price);
+  maxLikes = totalLikes(media)
+  displayTotalLikes(maxLikes);
+
+  displayInfoWindow(maxLikes, photographer.price);
 };
 
 // Appelle la fonction d'initialisation
