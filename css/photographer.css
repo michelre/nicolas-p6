@@ -147,7 +147,6 @@ form input {
 
 .info-container .heart {
   font-size: 23px;
-  color: #901c1c;
 }
 
 .info-container i:hover {
@@ -292,4 +291,61 @@ form input {
   font-weight: normal;
   margin: 0;
  
+}
+
+.carousel {
+  display: none;
+}
+
+.slider-container {
+  background: white;
+  z-index: 2;
+  position: absolute;
+  width: 80%;
+  height: 30%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  list-style: none;
+    padding: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+.slider {
+  background: white;  
+  list-style: none;
+  padding: 0;
+  display: flex;
+  width: 100%;
+  transition: all .5s linear;
+}
+
+.slide {
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, .5);
+}
+
+.btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.next {
+  right: 25px;
+}
+
+.prev {
+  left: 25px;
 }

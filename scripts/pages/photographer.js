@@ -2,6 +2,7 @@ let maxLikes = 0;
 let media = []
 let sortingOption = 'popularity'
 let mediaLiked = []
+let idx = 0;
 
 // Fonction pour récupérer les données d'un photographe à partir de son identifiant
 const fetchPhotographer = async (photographerId) => {
@@ -48,7 +49,7 @@ const displayPhotographerInfo = (photographer) => {
 const displayGallery = (media) => {
   const gallery = document.querySelector("#gallery");
   gallery.innerHTML = ""; 
-  media.forEach((element) => {
+  media.forEach((element, index) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
 
@@ -72,6 +73,10 @@ const displayGallery = (media) => {
     } else {
       heartMedia.classList.add("heart-empty", "far")
     }
+
+    mediaContainer.addEventListener("click", () => {
+       openLightbox(index)
+    })
   
 
     heartMedia.addEventListener("click", () => {
@@ -107,6 +112,7 @@ const displayGallery = (media) => {
     mediaContainer.appendChild(infoContainer);
 
     gallery.appendChild(mediaContainer);
+    addSlide(element)
   });
 };
 
@@ -208,6 +214,66 @@ const sortMedia = (value) => {
   displayTotalLikes(totalLikes(media));
 }
 
+const openLightbox = (index) => {
+  idx = index 
+  const carousel = document.querySelector('.carousel')
+  carousel.style.display = 'block'
+  changeSlide()
+}
+
+const closeLightbox = () => {
+  const carousel = document.querySelector('.carousel')
+  const overlay = document.querySelector('.overlay')
+  overlay.addEventListener('click', () => {
+    carousel.style.display = 'none'
+  })
+}
+
+const changeSlide = () => {
+  const slider = document.querySelector('.slider')    
+  const slide = document.querySelector('.slide');
+  const slideWidth = slide.getBoundingClientRect().width
+  slider.style.transform = `translateX(-${idx * slideWidth}px)`
+}
+
+const addSlide = (media) => {
+  const slider = document.querySelector('.slider')
+  const slide = document.createElement('li')
+  slide.classList.add('slide')
+  
+  const title = document.createElement('p')
+  title.innerHTML = media.title
+
+  slide.appendChild(title)
+  slider.appendChild(slide)
+}
+
+const lightboxEvents = () => {
+  const btnPrev = document.querySelector('.btn.prev')
+  const btnNext = document.querySelector('.btn.next')
+  const slides = document.querySelectorAll('.slide')
+
+  btnNext.addEventListener('click', () => {
+    if(idx == slides.length - 1){
+      idx = 0
+    } else {
+      idx += 1
+    }    
+    changeSlide()
+  })
+
+  btnPrev.addEventListener('click', () => {
+    if(idx == 0){
+      idx = slides.length - 1
+    } else {
+      idx -= 1
+    }  
+    changeSlide()
+  })
+
+
+}
+
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
@@ -221,6 +287,8 @@ const init = async () => {
   displayTotalLikes(maxLikes);
 
   displayInfoWindow(maxLikes, photographer.price);
+  lightboxEvents()
+  closeLightbox()
 };
 
 // Appelle la fonction d'initialisation
