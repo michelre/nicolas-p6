@@ -1,7 +1,7 @@
 let maxLikes = 0;
-let media = []
-let sortingOption = 'popularity'
-let mediaLiked = []
+let media = [];
+let sortingOption = "popularity";
+let mediaLiked = [];
 let idx = 0;
 
 // Fonction pour récupérer les données d'un photographe à partir de son identifiant
@@ -48,7 +48,7 @@ const displayPhotographerInfo = (photographer) => {
 // Fonction pour afficher la galerie de médias
 const displayGallery = (media) => {
   const gallery = document.querySelector("#gallery");
-  gallery.innerHTML = ""; 
+  gallery.innerHTML = "";
   media.forEach((element, index) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
@@ -61,46 +61,54 @@ const displayGallery = (media) => {
 
     const title = document.createElement("p");
     title.textContent = element.title;
+    // Ajout du stopPropagation pour éviter l'ouverture du carrousel lors du clic sur le titre
+    title.addEventListener("click", (event) => {
+      event.stopPropagation(); // Empêche l'événement de se propager au conteneur de média
+    });
 
     const likes = document.createElement("p");
-    likes.classList.add('likes')
+    likes.classList.add("likes");
     likes.innerHTML = `${element.likes}`;
+    // Ajout du stopPropagation pour éviter l'ouverture du carrousel lors du clic sur les likes
+    likes.addEventListener("click", (event) => {
+      event.stopPropagation(); // Empêche l'événement de se propager au conteneur de média
+    });
 
-    const heartMedia = document.createElement('i')
-    heartMedia.classList.add('heart', 'fa-heart')
-    if(mediaLiked.includes(element.id)){
-      heartMedia.classList.add("heart-full", "fas")  
+    const heartMedia = document.createElement("i");
+    heartMedia.classList.add("heart", "fa-heart");
+    if (mediaLiked.includes(element.id)) {
+      heartMedia.classList.add("heart-full", "fas");
     } else {
-      heartMedia.classList.add("heart-empty", "far")
+      heartMedia.classList.add("heart-empty", "far");
     }
 
     mediaContainer.addEventListener("click", () => {
-       openLightbox(index)
-    })
-  
+      openLightbox(index);
+    });
 
-    heartMedia.addEventListener("click", () => {
+    heartMedia.addEventListener("click", (event) => {
+      event.stopPropagation();
 
-      if(heartMedia.classList.contains('heart-empty')){
-        maxLikes += 1
-        element.likes += 1
-        mediaLiked.push(element.id)      
+      if (heartMedia.classList.contains("heart-empty")) {
+        maxLikes += 1;
+        element.likes += 1;
+        mediaLiked.push(element.id);
       } else {
-        maxLikes -= 1
-        element.likes -= 1
-        mediaLiked = mediaLiked.filter(id => id !== element.id)
+        maxLikes -= 1;
+        element.likes -= 1;
+        mediaLiked = mediaLiked.filter((id) => id !== element.id);
       }
 
       likes.innerHTML = `${element.likes}`;
-      displayTotalLikes(maxLikes)
+      displayTotalLikes(maxLikes);
 
-      heartMedia.classList.toggle('heart-empty')
-      heartMedia.classList.toggle('heart-full')
-      heartMedia.classList.toggle('far')
-      heartMedia.classList.toggle('fas')
+      heartMedia.classList.toggle("heart-empty");
+      heartMedia.classList.toggle("heart-full");
+      heartMedia.classList.toggle("far");
+      heartMedia.classList.toggle("fas");
 
-      if(sortingOption == 'popularity') {
-        sortMedia('popularity')
+      if (sortingOption == "popularity") {
+        sortMedia("popularity");
       }
     });
 
@@ -112,7 +120,7 @@ const displayGallery = (media) => {
     mediaContainer.appendChild(infoContainer);
 
     gallery.appendChild(mediaContainer);
-    addSlide(element)
+    addSlide(element);
   });
 };
 
@@ -194,101 +202,97 @@ contactButton.addEventListener("click", displayModal);
 // Écouteur d'événements pour le menu déroulant, triant et mettant à jour
 // la galerie en fonction du critère sélectionné (popularité, titre, date).
 document.getElementById("sorting").addEventListener("change", function () {
-  
-  sortMedia(this.value)
-    
+  sortMedia(this.value);
 });
 
 const sortMedia = (value) => {
   if (value === "popularity") {
     media.sort((a, b) => b.likes - a.likes);
-    sortingOption = 'popularity'
+    sortingOption = "popularity";
   } else if (value === "title") {
     media.sort((a, b) => a.title.localeCompare(b.title));
-    sortingOption = 'title'
+    sortingOption = "title";
   } else if (value === "date") {
     media.sort((a, b) => new Date(b.date) - new Date(a.date));
-    sortingOption = 'date'
+    sortingOption = "date";
   }
   displayGallery(media);
   displayTotalLikes(totalLikes(media));
-}
+};
 
 const openLightbox = (index) => {
-  idx = index 
-  const carousel = document.querySelector('.carousel')
-  carousel.style.display = 'block'
-  changeSlide()
-}
+  idx = index;
+  const carousel = document.querySelector(".carousel");
+  carousel.style.display = "block";
+  changeSlide();
+};
 
 const closeLightbox = () => {
-  const carousel = document.querySelector('.carousel')
-  const overlay = document.querySelector('.overlay')
-  overlay.addEventListener('click', () => {
-    carousel.style.display = 'none'
-  })
-}
+  const carousel = document.querySelector(".carousel");
+  const overlay = document.querySelector(".overlay");
+  overlay.addEventListener("click", () => {
+    carousel.style.display = "none";
+  });
+};
 
 const changeSlide = () => {
-  const slider = document.querySelector('.slider')    
-  const slide = document.querySelector('.slide');
-  const slideWidth = slide.getBoundingClientRect().width
-  slider.style.transform = `translateX(-${idx * slideWidth}px)`
-}
+  const slider = document.querySelector(".slider");
+  const slide = document.querySelector(".slide");
+  const slideWidth = slide.getBoundingClientRect().width;
+  slider.style.transform = `translateX(-${idx * slideWidth}px)`;
+};
 
 const addSlide = (media) => {
-  const slider = document.querySelector('.slider')
-  const slide = document.createElement('li')
-  slide.classList.add('slide')
-  
-  const title = document.createElement('p')
-  title.innerHTML = media.title
+  const slider = document.querySelector(".slider");
+  const slide = document.createElement("li");
+  slide.classList.add("slide");
 
-  slide.appendChild(title)
-  slider.appendChild(slide)
-}
+  const title = document.createElement("p");
+  title.innerHTML = media.title;
+
+  slide.appendChild(title);
+  slider.appendChild(slide);
+};
 
 const lightboxEvents = () => {
-  const btnPrev = document.querySelector('.btn.prev')
-  const btnNext = document.querySelector('.btn.next')
-  const slides = document.querySelectorAll('.slide')
+  const btnPrev = document.querySelector(".btn.prev");
+  const btnNext = document.querySelector(".btn.next");
+  const slides = document.querySelectorAll(".slide");
 
-  btnNext.addEventListener('click', () => {
-    if(idx == slides.length - 1){
-      idx = 0
+  btnNext.addEventListener("click", () => {
+    if (idx == slides.length - 1) {
+      idx = 0;
     } else {
-      idx += 1
-    }    
-    changeSlide()
-  })
+      idx += 1;
+    }
+    changeSlide();
+  });
 
-  btnPrev.addEventListener('click', () => {
-    if(idx == 0){
-      idx = slides.length - 1
+  btnPrev.addEventListener("click", () => {
+    if (idx == 0) {
+      idx = slides.length - 1;
     } else {
-      idx -= 1
-    }  
-    changeSlide()
-  })
-
-
-}
+      idx -= 1;
+    }
+    changeSlide();
+  });
+};
 
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
   media = await fetchMedia(parseInt(id));
-  sortMedia('popularity')
+  sortMedia("popularity");
   const photographer = await fetchPhotographer(parseInt(id));
   displayGallery(media);
   displayPhotographerInfo(photographer);
-  maxLikes = totalLikes(media)
+  maxLikes = totalLikes(media);
   displayTotalLikes(maxLikes);
 
   displayInfoWindow(maxLikes, photographer.price);
-  lightboxEvents()
-  closeLightbox()
+  lightboxEvents();
+  closeLightbox();
 };
 
 // Appelle la fonction d'initialisation
