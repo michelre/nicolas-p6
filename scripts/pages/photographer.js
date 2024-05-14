@@ -223,7 +223,7 @@ const sortMedia = (value) => {
 const openLightbox = (index) => {
   idx = index;
   const carousel = document.querySelector(".carousel");
-  carousel.style.display = "block";
+  carousel.style.display = 'flex';
   changeSlide();
 };
 
@@ -247,12 +247,18 @@ const addSlide = (media) => {
   const slide = document.createElement("li");
   slide.classList.add("slide");
 
+  const img = document.createElement("img");
+  img.src = `assets/media/${media.photographerId}/${media.image}`; 
+  img.alt = media.title;
+
   const title = document.createElement("p");
   title.innerHTML = media.title;
 
-  slide.appendChild(title);
+  slide.appendChild(img);   
+  slide.appendChild(title); 
   slider.appendChild(slide);
 };
+
 
 const lightboxEvents = () => {
   const btnPrev = document.querySelector(".btn.prev");
@@ -293,6 +299,7 @@ const init = async () => {
   displayInfoWindow(maxLikes, photographer.price);
   lightboxEvents();
   closeLightbox();
+  
 };
 
 // Appelle la fonction d'initialisation
