@@ -2,7 +2,7 @@ let maxLikes = 0;
 let media = [];
 let sortingOption = "popularity";
 let mediaLiked = [];
-let idx = 0;
+let lightbox = null;
 
 // Fonction pour récupérer les données d'un photographe à partir de son identifiant
 const fetchPhotographer = async (photographerId) => {
@@ -47,8 +47,10 @@ const displayPhotographerInfo = (photographer) => {
 
 // Fonction pour afficher la galerie de médias
 const displayGallery = (media) => {
+  console.log(lightbox)
   const gallery = document.querySelector("#gallery");
   gallery.innerHTML = "";
+  lightbox.clearSlides()
   media.forEach((element, index) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
@@ -83,7 +85,7 @@ const displayGallery = (media) => {
     }
 
     mediaContainer.addEventListener("click", () => {
-      openLightbox(index);
+      lightbox.open(index);
     });
 
     heartMedia.addEventListener("click", (event) => {
@@ -119,8 +121,8 @@ const displayGallery = (media) => {
     mediaContainer.appendChild(mediaDOM);
     mediaContainer.appendChild(infoContainer);
 
-    gallery.appendChild(mediaContainer);
-    addSlide(element);
+    gallery.appendChild(mediaContainer);    
+    lightbox.addSlide(element);
   });
 };
 
@@ -220,85 +222,18 @@ const sortMedia = (value) => {
   displayTotalLikes(totalLikes(media));
 };
 
-const openLightbox = (index) => {
-  idx = index;
-  const carousel = document.querySelector(".carousel");
-  carousel.style.display = 'flex';
-  changeSlide();
-};
-
-const closeLightbox = () => {
-  const carousel = document.querySelector(".carousel");
-  const overlay = document.querySelector(".overlay");
-  overlay.addEventListener("click", () => {
-    carousel.style.display = "none";
-  });
-};
-
-const changeSlide = () => {
-  const slider = document.querySelector(".slider");
-  const slide = document.querySelector(".slide");
-  const slideWidth = slide.getBoundingClientRect().width;
-  slider.style.transform = `translateX(-${idx * slideWidth}px)`;
-};
-
-const addSlide = (media) => {
-  const slider = document.querySelector(".slider");
-  const slide = document.createElement("li");
-  slide.classList.add("slide");
-
-  const img = document.createElement("img");
-  img.src = `assets/media/${media.photographerId}/${media.image}`; 
-  img.alt = media.title;
-
-  const title = document.createElement("p");
-  title.innerHTML = media.title;
-
-  slide.appendChild(img);   
-  slide.appendChild(title); 
-  slider.appendChild(slide);
-};
-
-
-const lightboxEvents = () => {
-  const btnPrev = document.querySelector(".btn.prev");
-  const btnNext = document.querySelector(".btn.next");
-  const slides = document.querySelectorAll(".slide");
-
-  btnNext.addEventListener("click", () => {
-    if (idx == slides.length - 1) {
-      idx = 0;
-    } else {
-      idx += 1;
-    }
-    changeSlide();
-  });
-
-  btnPrev.addEventListener("click", () => {
-    if (idx == 0) {
-      idx = slides.length - 1;
-    } else {
-      idx -= 1;
-    }
-    changeSlide();
-  });
-};
-
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
   media = await fetchMedia(parseInt(id));
+  lightbox = new Lightbox()
   sortMedia("popularity");
-  const photographer = await fetchPhotographer(parseInt(id));
-  displayGallery(media);
+  const photographer = await fetchPhotographer(parseInt(id));  
   displayPhotographerInfo(photographer);
   maxLikes = totalLikes(media);
   displayTotalLikes(maxLikes);
-
-  displayInfoWindow(maxLikes, photographer.price);
-  lightboxEvents();
-  closeLightbox();
+  displayInfoWindow(maxLikes, photographer.price);  
   
 };
 

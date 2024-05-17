@@ -1,10 +1,10 @@
 class Media {
 
-    constructor(mediaObject){
+    constructor(mediaObject, options){
         if(mediaObject.image){
-            this.media = new MediaImage(mediaObject)
+            this.media = new MediaImage(mediaObject, options)
         } else {
-            this.media = new MediaVideo(mediaObject)
+            this.media = new MediaVideo(mediaObject, options)
         }
     }
 
@@ -16,8 +16,9 @@ class Media {
 
 class MediaImage {
 
-    constructor(media){
+    constructor(media, options){
         this.media = media
+        this.options = options
     }
 
     getMediaDOM(){
@@ -30,14 +31,17 @@ class MediaImage {
 
 class MediaVideo {
 
-    constructor(media){
+    constructor(media, options){
         this.media = media
+        this.options = options
     }
 
     getMediaDOM(){
         const video = document.createElement('video')
         const src = document.createElement('source')
-        video.setAttribute('controls', '')
+        if(this.options && this.options.controls){
+            video.setAttribute('controls', '')
+        }
         src.setAttribute('src', `assets/media/${this.media.photographerId}/${this.media.video}`)
         video.appendChild(src)
 

@@ -1,6 +1,7 @@
 .container {
   max-width: 1240px;
   margin: auto;
+  padding: 0 24px
 }
 
 #contact_modal {
@@ -11,11 +12,14 @@
   background-color: #fafafa;
   padding: 40px 50px;
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #namePhotographer {
   align-self: center;
+  width: 100%;
+  text-align: center;
 }
 
 #namePhotographer h2 {
@@ -33,6 +37,7 @@
   border-radius: 50%;
   object-fit: cover;
   align-self: center;
+  order: -1;
 }
 
 .photograph-header h2 {
@@ -44,14 +49,14 @@
   font-size: 20px;
   font-weight: bold;
   color: white;
-  padding: 11px;
-  width: 170px;
+  padding: 11px;  
   height: 60px;
   border: none;
   background-color: #901c1c;
   border-radius: 5px;
   cursor: pointer;
   align-self: center;
+  width: 100%;
 }
 
 .modal {
@@ -159,6 +164,28 @@ form input {
     grid-template-columns: 1fr 1fr;
     gap: 96px;
   }
+
+  .photograph-header {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+  }
+
+  #namePhotographer {
+    text-align: left;
+    width: auto;
+  }
+
+  .contact_button {
+    width: 170px;
+  }
+
+  .photograph-header img {
+    order: 3;
+  }
+
+  .dropdown select{
+    width: 160px !important;
+  }
 }
 
 @media screen and (min-width: 1024px) {
@@ -175,7 +202,7 @@ form input {
   color: white;
   padding: 10px;
   border-radius: 5px;
-  width: 16%;
+  width: 300px;
   color: black;
   font-weight: bold;
   font-size: 22px;
@@ -197,6 +224,7 @@ form input {
 
 .dropdown {
   position: relative;
+  width: 100%;
 }
 
 .dropdown select {
@@ -207,7 +235,7 @@ form input {
   cursor: pointer;
   appearance: none;
   padding-right: 30px;
-  width: 160px;
+  width: 100%;
   font-size: 20px;
   border-radius: 8px 8px 8px 8px;
 }
@@ -231,6 +259,7 @@ form input {
   font-size: 20px;
   margin-right: 20px;
   font-weight: bold;
+  flex-shrink: 0;
 }
 
 /* Style de la modal */
@@ -305,7 +334,6 @@ form input {
   z-index: 1000; 
   align-items: center; 
   justify-content: center; 
-  display: flex; 
 }
 .slider-container {
   background: white;
@@ -314,6 +342,8 @@ form input {
   border-radius: 10px; 
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+  opacity: 0;
+  transition: opacity 2s linear;
 }
 
 .slider-container li {
@@ -338,7 +368,7 @@ form input {
 
 .slider {
   display: flex;
-  transition: all .5s linear;
+  transition: all .250s linear;
 }
 
 .carousel .slide img {
