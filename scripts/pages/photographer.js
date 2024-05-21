@@ -54,6 +54,7 @@ const displayGallery = (media) => {
   media.forEach((element, index) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
+    mediaDOM.tabIndex = 0; // Ajout du tabindex pour rendre les médias focusables
 
     const mediaContainer = document.createElement("div");
     mediaContainer.classList.add("media-container");
@@ -78,6 +79,7 @@ const displayGallery = (media) => {
 
     const heartMedia = document.createElement("i");
     heartMedia.classList.add("heart", "fa-heart");
+    heartMedia.tabIndex = 0; // Ajout du tabindex pour rendre les cœurs focusables
     if (mediaLiked.includes(element.id)) {
       heartMedia.classList.add("heart-full", "fas");
     } else {
@@ -88,29 +90,22 @@ const displayGallery = (media) => {
       lightbox.open(index);
     });
 
+    mediaDOM.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        event.stopPropagation();
+        lightbox.open(index);
+      }
+    });
+
     heartMedia.addEventListener("click", (event) => {
       event.stopPropagation();
+      toggleLike(element, heartMedia, likes);
+    });
 
-      if (heartMedia.classList.contains("heart-empty")) {
-        maxLikes += 1;
-        element.likes += 1;
-        mediaLiked.push(element.id);
-      } else {
-        maxLikes -= 1;
-        element.likes -= 1;
-        mediaLiked = mediaLiked.filter((id) => id !== element.id);
-      }
-
-      likes.innerHTML = `${element.likes}`;
-      displayTotalLikes(maxLikes);
-
-      heartMedia.classList.toggle("heart-empty");
-      heartMedia.classList.toggle("heart-full");
-      heartMedia.classList.toggle("far");
-      heartMedia.classList.toggle("fas");
-
-      if (sortingOption == "popularity") {
-        sortMedia("popularity");
+    heartMedia.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        event.stopPropagation();
+        toggleLike(element, heartMedia, likes);
       }
     });
 
@@ -124,6 +119,31 @@ const displayGallery = (media) => {
     gallery.appendChild(mediaContainer);    
     lightbox.addSlide(element);
   });
+};
+
+const toggleLike = (element, heartMedia, likes) => {
+  const isLiked = heartMedia.classList.contains("heart-full");
+
+  // Update the like count
+  if (isLiked) {
+    maxLikes -= 1;
+    element.likes -= 1;
+    mediaLiked = mediaLiked.filter((id) => id !== element.id);
+  } else {
+    maxLikes += 1;
+    element.likes += 1;
+    mediaLiked.push(element.id);
+  }
+
+  // Update the display
+  likes.innerHTML = `${element.likes}`;
+  displayTotalLikes(maxLikes);
+
+  // Toggle the heart class
+  heartMedia.classList.toggle("heart-empty", isLiked);
+  heartMedia.classList.toggle("heart-full", !isLiked);
+  heartMedia.classList.toggle("far", isLiked);
+  heartMedia.classList.toggle("fas", !isLiked);
 };
 
 // Fonction pour afficher le nombre total de likes
@@ -160,6 +180,8 @@ const modal = document.getElementById("contact_modal");
 let photographerNameAdded = false;
 
 // Fonction pour afficher la modal
+// Fonction pour afficher la modal
+// Fonction pour afficher la modal
 function displayModal() {
   // Vérifier si le nom du photographe a déjà été ajouté à la modal
   if (!photographerNameAdded) {
@@ -191,11 +213,63 @@ function displayModal() {
 
   // Afficher la modal
   modal.style.display = "block";
+
+  // Ajouter un écouteur d'événements pour fermer la modal lorsque la touche Échap est pressée
+  document.addEventListener("keydown", closeModalOnEscape);
+
+  // Ajouter un écouteur d'événements pour gérer la navigation cyclique
+  modal.addEventListener("keydown", trapFocus);
+
+  // Mettre le focus sur le champ "Prénom"
+  document.getElementById("first_name").focus();
+
+  // Ajouter un gestionnaire d'événements pour la touche "Entrée" sur la croix de fermeture
+  const closeButton = document.querySelector('.header-form img[onclick="closeModal()"]');
+  closeButton.addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+      closeModal();
+    }
+  });
 }
 
 // Fonction pour fermer la modal
 function closeModal() {
   modal.style.display = "none";
+  // Retirer l'écouteur d'événements pour la touche Échap
+  document.removeEventListener("keydown", closeModalOnEscape);
+
+  // Retirer l'écouteur d'événements pour la navigation cyclique
+  modal.removeEventListener("keydown", trapFocus);
+}
+
+// Fonction pour fermer la modal avec la touche Échap
+function closeModalOnEscape(event) {
+  if (event.key === "Escape") {
+    closeModal();
+  }
+}
+
+// Fonction pour gérer la navigation cyclique dans la modal
+function trapFocus(event) {
+  const focusableElements = modal.querySelectorAll('input, textarea, button, img[onclick]');
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+
+  if (event.key === "Tab") {
+    if (event.shiftKey) {
+      // Touche Maj+Tab
+      if (document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      // Touche Tab
+      if (document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }
 }
 
 // Ajoutez un écouteur d'événements sur le bouton "Contactez-moi"
@@ -222,6 +296,16 @@ const sortMedia = (value) => {
   displayTotalLikes(totalLikes(media));
 };
 
+// Ajout de la fonctionnalité de focus et de redirection pour le logo
+const homeLogo = document.getElementById('homeLogo');
+homeLogo.tabIndex = 0;
+homeLogo.setAttribute('role', 'button');
+homeLogo.addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    window.location.href = 'index.html';
+  }
+});
+
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
@@ -239,3 +323,4 @@ const init = async () => {
 
 // Appelle la fonction d'initialisation
 init();
+

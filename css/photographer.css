@@ -248,6 +248,7 @@ form input {
   pointer-events: none;
   color: #fafafa;
   font-size: 20px;
+  right: 88%;
 }
 .sorting-container {
   display: flex;

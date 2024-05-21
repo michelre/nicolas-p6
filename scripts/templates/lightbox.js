@@ -1,7 +1,6 @@
 class Lightbox {
 
     constructor(){
-
         this.initEvents()
         this.index = 0
     }
@@ -33,6 +32,18 @@ class Lightbox {
         
         overlay.addEventListener("click", () => {
             this.close()          
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (carousel.style.display === 'flex') {
+                if (event.key === "ArrowRight") {
+                    btnNext.click();
+                } else if (event.key === "ArrowLeft") {
+                    btnPrev.click();
+                } else if (event.key === "Escape") {
+                    this.close();
+                }
+            }
         });
     }
 

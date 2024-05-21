@@ -30,6 +30,16 @@ async function displayData(photographers) {
 async function init() {
   const { photographers } = await getPhotographers();
   displayData(photographers);
+
+  // Ajout de la fonctionnalité de focus et de redirection pour le logo
+  const homeLogo = document.getElementById('homeLogo');
+  homeLogo.tabIndex = 0;
+  homeLogo.setAttribute('role', 'button');
+  homeLogo.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      window.location.href = 'index.html';
+    }
+  });
 }
 
 init();
