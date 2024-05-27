@@ -1,4 +1,3 @@
-
 /**
  * Fonction qui permet de récupérer la liste des photographes
  * @returns {Promise}
@@ -7,6 +6,10 @@ async function getPhotographers() {
   return fetch("data/photographers.json").then((res) => res.json());
 }
 
+/**
+ * Fonction qui permet d'afficher les données des photographes
+ * @param {Array} photographers - La liste des photographes
+ */
 async function displayData(photographers) {
   const photographersSection = document.querySelector(".photographer_section");
 
@@ -32,17 +35,21 @@ async function displayData(photographers) {
   });
 }
 
+/**
+ * Fonction d'initialisation
+ */
+
 async function init() {
   const { photographers } = await getPhotographers();
   displayData(photographers);
 
   // Ajout de la fonctionnalité de focus et de redirection pour le logo
-  const homeLogo = document.getElementById('homeLogo');
+  const homeLogo = document.getElementById("homeLogo");
   homeLogo.tabIndex = 0;
-  homeLogo.setAttribute('role', 'button');
-  homeLogo.addEventListener('keypress', function(event) {
-    if (event.key === 'Enter') {
-      window.location.href = 'index.html';
+  homeLogo.setAttribute("role", "button");
+  homeLogo.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      window.location.href = "index.html";
     }
   });
 }

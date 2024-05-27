@@ -386,6 +386,10 @@
   object-fit: cover;
 }
 
+.carousel .slide video {
+  width: 80%;
+}
+
 .btn {
   position: absolute;
   top: 50%;

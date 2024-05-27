@@ -6,8 +6,8 @@ let lightbox = null;
 
 /**
  * Fonction pour récupérer les données d'un photographe à partir de son identifiant
- * @param {int} photographerId
- * @returns {Promise}
+ * @param {int} photographerId - L'identifiant du photographe
+ * @returns {Promise} - Une promesse qui résout les données du photographe
  */
 const fetchPhotographer = async (photographerId) => {
   return fetch("data/photographers.json")
@@ -17,11 +17,10 @@ const fetchPhotographer = async (photographerId) => {
     );
 };
 
-
 /**
  * Fonction pour récupérer les médias d'un photographe à partir de son identifiant
- * @param {int} photographerId 
- * @returns 
+ * @param {int} photographerId - L'identifiant du photographe
+ * @returns {Promise<Array>} - Une promesse qui résout avec une liste de médias
  */
 const fetchMedia = async (photographerId) => {
   return fetch("data/photographers.json")
@@ -31,7 +30,10 @@ const fetchMedia = async (photographerId) => {
     );
 };
 
-// Fonction pour afficher les informations d'un photographe
+/**
+ * Fonction pour afficher les informations d'un photographe
+ * @param {Object} photographer - Les données du photographe
+ */
 const displayPhotographerInfo = (photographer) => {
   const header = document.querySelector(".photograph-header");
   const namePhotographer = document.querySelector("#namePhotographer");
@@ -54,12 +56,15 @@ const displayPhotographerInfo = (photographer) => {
   header.appendChild(img);
 };
 
-// Fonction pour afficher la galerie de médias
+/**
+ * Fonction pour afficher la galerie de médias
+ * @param {Array} media - Une liste de médias à afficher
+ */
 const displayGallery = (media) => {
-  console.log(lightbox)
+  console.log(lightbox);
   const gallery = document.querySelector("#gallery");
   gallery.innerHTML = "";
-  lightbox.clearSlides()
+  lightbox.clearSlides();
   media.forEach((element, index) => {
     const mediaObj = new Media(element);
     const mediaDOM = mediaObj.getMediaDOM();
@@ -125,15 +130,22 @@ const displayGallery = (media) => {
     mediaContainer.appendChild(mediaDOM);
     mediaContainer.appendChild(infoContainer);
 
-    gallery.appendChild(mediaContainer);    
+    gallery.appendChild(mediaContainer);
     lightbox.addSlide(element);
   });
 };
 
+/**
+ * Fonction pour basculer le like d'un média
+ * @param {Object} element - L'objet média
+ * @param {HTMLElement} heartMedia - L'élément DOM du cœur
+ * @param {HTMLElement} likes - L'élément DOM des likes
+ */
+
 const toggleLike = (element, heartMedia, likes) => {
   const isLiked = heartMedia.classList.contains("heart-full");
 
-  // Update the like count
+  // Mettre à jour le nombre de likes
   if (isLiked) {
     maxLikes -= 1;
     element.likes -= 1;
@@ -144,24 +156,31 @@ const toggleLike = (element, heartMedia, likes) => {
     mediaLiked.push(element.id);
   }
 
-  // Update the display
+  // Mettre à jour l'affichage
   likes.innerHTML = `${element.likes}`;
   displayTotalLikes(maxLikes);
 
-  // Toggle the heart class
+  // Basculer la classe du cœur
   heartMedia.classList.toggle("heart-empty", isLiked);
   heartMedia.classList.toggle("heart-full", !isLiked);
   heartMedia.classList.toggle("far", isLiked);
   heartMedia.classList.toggle("fas", !isLiked);
 };
 
-// Fonction pour afficher le nombre total de likes
+/**
+ * Fonction pour afficher le nombre total de likes
+ * @param {number} totalLikes - Le nombre total de likes
+ */
 const displayTotalLikes = (totalLikes) => {
   const totalLikesElement = document.getElementById("totalLikes");
   totalLikesElement.textContent = `${totalLikes}`;
 };
 
-// Fonction pour calculer le nombre total de likes
+/**
+ * Fonction pour calculer le nombre total de likes
+ * @param {Array} media - Une liste de médias
+ * @returns {number} - Le nombre total de likes
+ */
 const totalLikes = (media) => {
   let total = 0;
   media.forEach((element) => {
@@ -170,7 +189,11 @@ const totalLikes = (media) => {
   return total;
 };
 
-// Fonction pour afficher la fenêtre d'informations
+/**
+ * Fonction pour afficher la fenêtre d'informations
+ * @param {number} totalLikes - Le nombre total de likes
+ * @param {number} pricePerDay - Le prix par jour
+ */
 const displayInfoWindow = (totalLikes, pricePerDay) => {
   const infoWindow = document.getElementById("infoWindow");
   const totalLikesElement = document.getElementById("totalLikes");
@@ -188,9 +211,9 @@ const modal = document.getElementById("contact_modal");
 // Variable pour suivre si le nom du photographe a déjà été ajouté à la modal
 let photographerNameAdded = false;
 
-// Fonction pour afficher la modal
-// Fonction pour afficher la modal
-// Fonction pour afficher la modal
+/**
+ *Fonction pour afficher la modal
+ */
 function displayModal() {
   // Vérifier si le nom du photographe a déjà été ajouté à la modal
   if (!photographerNameAdded) {
@@ -233,15 +256,19 @@ function displayModal() {
   document.getElementById("first_name").focus();
 
   // Ajouter un gestionnaire d'événements pour la touche "Entrée" sur la croix de fermeture
-  const closeButton = document.querySelector('.header-form img[onclick="closeModal()"]');
-  closeButton.addEventListener('keypress', (event) => {
-    if (event.key === 'Enter') {
+  const closeButton = document.querySelector(
+    '.header-form img[onclick="closeModal()"]'
+  );
+  closeButton.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
       closeModal();
     }
   });
 }
 
-// Fonction pour fermer la modal
+/**
+ *Fonction pour fermer la modal
+ */
 function closeModal() {
   modal.style.display = "none";
   // Retirer l'écouteur d'événements pour la touche Échap
@@ -251,16 +278,25 @@ function closeModal() {
   modal.removeEventListener("keydown", trapFocus);
 }
 
-// Fonction pour fermer la modal avec la touche Échap
+/**
+ * Fonction pour fermer la modal avec la touche Échap
+ * @param {KeyboardEvent} event - L'événement clavier
+ */
 function closeModalOnEscape(event) {
   if (event.key === "Escape") {
     closeModal();
   }
 }
 
-// Fonction pour gérer la navigation cyclique dans la modal
+/**
+ * Fonction pour gérer la navigation cyclique dans la modal
+ * @param {KeyboardEvent} event - L'événement clavier
+ */
+
 function trapFocus(event) {
-  const focusableElements = modal.querySelectorAll('input, textarea, button, img[onclick]');
+  const focusableElements = modal.querySelectorAll(
+    "input, textarea, button, img[onclick]"
+  );
   const firstElement = focusableElements[0];
   const lastElement = focusableElements[focusableElements.length - 1];
 
@@ -306,40 +342,48 @@ const sortMedia = (value) => {
 };
 
 // Ajout de la fonctionnalité de focus et de redirection pour le logo
-const homeLogo = document.getElementById('homeLogo');
+const homeLogo = document.getElementById("homeLogo");
 homeLogo.tabIndex = 0;
-homeLogo.setAttribute('role', 'button');
-homeLogo.addEventListener('keypress', function(event) {
-  if (event.key === 'Enter') {
-    window.location.href = 'index.html';
+homeLogo.setAttribute("role", "button");
+homeLogo.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    window.location.href = "index.html";
   }
 });
 
+/**
+ * Fonction pour initialiser les événements du formulaire de contact
+ */
 const initContactEvent = () => {
-  const contactForm = document.querySelector('#contact-form')
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault()
-    console.log("First Name: ", e.target.first_name.value)
-    console.log("Last Name: ", e.target.last_name.value)
-    console.log("Email: ", e.target.email.value)
-    console.log("Message: ", e.target.message.value)
-  })
-}
+  const contactForm = document.querySelector("#contact-form");
+  contactForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    console.log("First Name: ", e.target.first_name.value);
+    console.log("Last Name: ", e.target.last_name.value);
+    console.log("Email: ", e.target.email.value);
+    console.log("Message: ", e.target.message.value);
+  });
+};
 
-// Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
+/**
+ * Fonction pour initialiser la page : récupère les médias et les informations du photographe, puis affiche la galerie et les informations
+ */
+
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
   let id = params.get("id");
   media = await fetchMedia(parseInt(id));
-  lightbox = new Lightbox()
+  lightbox = new Lightbox();
   sortMedia("popularity");
-  const photographer = await fetchPhotographer(parseInt(id));  
+  const photographer = await fetchPhotographer(parseInt(id));
   displayPhotographerInfo(photographer);
   maxLikes = totalLikes(media);
   displayTotalLikes(maxLikes);
-  displayInfoWindow(maxLikes, photographer.price);  
-  initContactEvent()
+  displayInfoWindow(maxLikes, photographer.price);
+  initContactEvent();
 };
 
-// Appelle la fonction d'initialisation
+/**
+ *Appelle la fonction d'initialisation
+ */
 init();
