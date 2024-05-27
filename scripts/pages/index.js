@@ -1,3 +1,8 @@
+
+/**
+ * Fonction qui permet de récupérer la liste des photographes
+ * @returns {Promise}
+ */
 async function getPhotographers() {
   return fetch("data/photographers.json").then((res) => res.json());
 }

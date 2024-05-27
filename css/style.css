@@ -19,6 +19,12 @@ h1 {
     margin-right: 100px;
 }
 
+textarea {
+    resize: none;
+    border-radius: 5px;
+    width: 100%;
+}
+
 .logo {
     height: 50px;
 }

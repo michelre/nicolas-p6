@@ -4,7 +4,11 @@ let sortingOption = "popularity";
 let mediaLiked = [];
 let lightbox = null;
 
-// Fonction pour récupérer les données d'un photographe à partir de son identifiant
+/**
+ * Fonction pour récupérer les données d'un photographe à partir de son identifiant
+ * @param {int} photographerId
+ * @returns {Promise}
+ */
 const fetchPhotographer = async (photographerId) => {
   return fetch("data/photographers.json")
     .then((res) => res.json())
@@ -13,7 +17,12 @@ const fetchPhotographer = async (photographerId) => {
     );
 };
 
-// Fonction pour récupérer les médias d'un photographe à partir de son identifiant
+
+/**
+ * Fonction pour récupérer les médias d'un photographe à partir de son identifiant
+ * @param {int} photographerId 
+ * @returns 
+ */
 const fetchMedia = async (photographerId) => {
   return fetch("data/photographers.json")
     .then((res) => res.json())
@@ -306,6 +315,17 @@ homeLogo.addEventListener('keypress', function(event) {
   }
 });
 
+const initContactEvent = () => {
+  const contactForm = document.querySelector('#contact-form')
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    console.log("First Name: ", e.target.first_name.value)
+    console.log("Last Name: ", e.target.last_name.value)
+    console.log("Email: ", e.target.email.value)
+    console.log("Message: ", e.target.message.value)
+  })
+}
+
 // Initialisation : récupère les médias et les informations du photographe et affiche la galerie ainsi que les informations
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
@@ -318,9 +338,8 @@ const init = async () => {
   maxLikes = totalLikes(media);
   displayTotalLikes(maxLikes);
   displayInfoWindow(maxLikes, photographer.price);  
-  
+  initContactEvent()
 };
 
 // Appelle la fonction d'initialisation
 init();
-
