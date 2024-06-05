@@ -1,105 +1,110 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="icon" type="image/png" href="assets/favicon.png" />
-    <link
-      href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap"
-      rel="stylesheet"
-    />
-    <title>Fisheye - photographe</title>
-  </head>
-  <body>
-    <header class="container" role="banner">
-      <img src="assets/images/logo.png" class="logo" alt="Fisheye Logo" id="homeLogo"/>
-    </header>
-    <main id="main" class="container">
-      <div class="photograph-header">
-        <div id="namePhotographer"></div>
-        <button class="contact_button">Contactez-moi</button>
-        <div class="photographer-info">
-          <p class="tagline"></p>
-          <p class="price"></p>
-        </div>
-      </div>
-      <form class="sorting-container">
-        <label class="sort-by" for="sorting">Trier par</label>
-        <div class="dropdown">
-          <select id="sorting">
-            <option value="popularity">Popularité</option>
-            <option value="date">Date</option>
-            <option value="title">Titre</option>
-          </select>
-          <i class="fa-solid fa-chevron-down"></i>
-        </div>
-      </form>
-      <div id="gallery"></div>
-    </main>
 
-    <div class="modal" id="contact_modal">
+<head>
+  <link href="css/style.css" rel="stylesheet" type="text/css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+  <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet" />
+  <title>Fisheye - photographe</title>
+</head>
+
+<body>
+  <header class="container" role="banner">
+    <a href="/">
+      <img src="assets/images/logo.png" class="logo" alt="Fisheye Logo" id="homeLogo" />
+    </a>
+  </header>
+  <main id="main" class="container">
+    <div class="photograph-header">
+      <div id="namePhotographer"></div>
+      <button class="contact_button">Contactez-moi</button>
+      <div class="photographer-info">
+        <p class="tagline"></p>
+        <p class="price"></p>
+      </div>
+    </div>
+    <form class="sorting-container">
+      <label class="sort-by" for="sorting">Trier par</label>
+      <div class="dropdown">
+        <select id="sorting">
+          <option value="popularity">Popularité</option>
+          <option value="date">Date</option>
+          <option value="title">Titre</option>
+        </select>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+    </form>
+    <div id="gallery"></div>
+  </main>
+
+  <div class="modal" id="contact_modal">
+
+    <div class="modal-content">
       <header class="header-form">
         <div class="info-form">
           <h2>Contactez-moi</h2>
-          <img src="assets/icons/close.svg" onclick="closeModal()" tabindex="6" alt="Fermer la modale" aria-label="Fermer la modal" />
+          <a href="#">
+            <img src="assets/icons/close.svg" class="close-contact-modal" alt="Fermer la modale"
+              aria-label="Fermer la modal" />
+          </a>
         </div>
       </header>
       <form id="contact-form">
         <div class="form-input-marge">
           <label for="first_name">Prénom</label>
-          <input type="text" id="first_name" name="first_name" tabindex="1" />
+          <input type="text" id="first_name" name="first_name"/>
         </div>
         <div>
           <label for="last_name">Nom</label>
-          <input type="text" id="last_name" name="last_name" tabindex="2" />
+          <input type="text" id="last_name" name="last_name"/>
         </div>
         <div>
           <label for="email">Email</label>
-          <input type="email" id="email" name="email" tabindex="3" />
+          <input type="email" id="email" name="email"/>
         </div>
         <div>
           <label for="message-input">Votre message</label>
-          <textarea rows="10" id="message-input" name="message" tabindex="4"></textarea>
+          <textarea rows="10" id="message-input" name="message"></textarea>
         </div>
         <div class="button-container">
-          <button type="submit" tabindex="5">Envoyer</button>
+          <button type="submit">Envoyer</button>
         </div>
       </form>
     </div>
-    
-    <div id="infoWindow" class="info-window">
-      <div class="info-bar">
-        <div class="likes-container">
-          <div id="totalLikes"></div>
-          <i class="fa-solid fa-heart"></i>
-        </div>
-        <div id="pricePerDay"></div>
+    <div class="contact-overlay"></div>
+  </div>
+
+  <div id="infoWindow" class="info-window">
+    <div class="info-bar">
+      <div class="likes-container">
+        <div id="totalLikes"></div>
+        <i class="fa-solid fa-heart"></i>
       </div>
+      <div id="pricePerDay"></div>
+    </div>
+  </div>
+
+  <div class="carousel">
+    <div class="slider-container">
+      <ul class="slider"></ul>
     </div>
 
-    <div class="carousel">
-      <div class="slider-container">
-        <ul class="slider"></ul>
-      </div>
+    <i class="btn prev fas fa-chevron-left"></i>
 
-      <i class="btn prev fas fa-chevron-left" ></i>
+    <i class="btn next fas fa-chevron-right"></i>
 
-      <i class="btn next fas fa-chevron-right"></i>
+    <div class="overlay"></div>
+  </div>
 
-      <div class="overlay"></div>
-    </div>
-    
-    <script src="scripts/templates/media.js"></script>
-    <script src="scripts/templates/lightbox.js"></script>
-    <script src="scripts/pages/photographer.js"></script>
-    <script src="scripts/utils/contactForm.js"></script>
-  </body>
+  <script src="scripts/utils/utils.js"></script>
+  <script src="scripts/templates/media.js"></script>
+  <script src="scripts/templates/lightbox.js"></script>
+  <script src="scripts/pages/photographer.js"></script>
+</body>
+
 </html>

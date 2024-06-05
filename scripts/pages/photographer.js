@@ -1,6 +1,10 @@
+// On récupère l'id du photographe en query de la requête
+let params = new URL(document.location.toString()).searchParams;
+let id = parseInt(params.get("id"));
+
+
 let maxLikes = 0;
 let media = [];
-let sortingOption = "popularity";
 let mediaLiked = [];
 let lightbox = null;
 
@@ -177,19 +181,6 @@ const displayTotalLikes = (totalLikes) => {
 };
 
 /**
- * Fonction pour calculer le nombre total de likes
- * @param {Array} media - Une liste de médias
- * @returns {number} - Le nombre total de likes
- */
-const totalLikes = (media) => {
-  let total = 0;
-  media.forEach((element) => {
-    total += element.likes;
-  });
-  return total;
-};
-
-/**
  * Fonction pour afficher la fenêtre d'informations
  * @param {number} totalLikes - Le nombre total de likes
  * @param {number} pricePerDay - Le prix par jour
@@ -205,77 +196,40 @@ const displayInfoWindow = (totalLikes, pricePerDay) => {
   infoWindow.style.display = "block";
 };
 
-const contactButton = document.querySelector(".contact_button");
-const modal = document.getElementById("contact_modal");
+/**
+ * Fonction pour afficher la modal
+ */
+function displayModal(photographer) {  
+  const photographerNameElement = document.createElement("h3");
 
-// Variable pour suivre si le nom du photographe a déjà été ajouté à la modal
-let photographerNameAdded = false;
+  photographerNameElement.textContent = photographer.name;
+
+  const testDiv = document.querySelector(".info-form");
+
+  testDiv.appendChild(photographerNameElement);
+}
+
 
 /**
- *Fonction pour afficher la modal
+ * Fonction qui permet d'afficher la modal de contact
  */
-function displayModal() {
-  // Vérifier si le nom du photographe a déjà été ajouté à la modal
-  if (!photographerNameAdded) {
-    // Récupérer l'ID du photographe depuis l'URL ou une autre source
-    let params = new URL(document.location.toString()).searchParams;
-    let photographerId = params.get("id");
-
-    // Appeler fetchPhotographer pour récupérer les données du photographe
-    fetchPhotographer(parseInt(photographerId))
-      .then((photographer) => {
-        const photographerNameElement = document.createElement("h3");
-
-        photographerNameElement.textContent = photographer.name;
-
-        const testDiv = document.querySelector(".info-form");
-
-        testDiv.appendChild(photographerNameElement);
-
-        // Mettre à jour la variable pour indiquer que le nom du photographe a été ajouté
-        photographerNameAdded = true;
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des données du photographe :",
-          error
-        );
-      });
-  }
-
+function showContactModal() {
+  const modal = document.getElementById("contact_modal");
+  const form = document.querySelector('#contact-form')  
   // Afficher la modal
   modal.style.display = "block";
-
-  // Ajouter un écouteur d'événements pour fermer la modal lorsque la touche Échap est pressée
-  document.addEventListener("keydown", closeModalOnEscape);
-
-  // Ajouter un écouteur d'événements pour gérer la navigation cyclique
-  modal.addEventListener("keydown", trapFocus);
-
-  // Mettre le focus sur le champ "Prénom"
-  document.getElementById("first_name").focus();
-
-  // Ajouter un gestionnaire d'événements pour la touche "Entrée" sur la croix de fermeture
-  const closeButton = document.querySelector(
-    '.header-form img[onclick="closeModal()"]'
-  );
-  closeButton.addEventListener("keypress", (event) => {
-    if (event.key === "Enter") {
-      closeModal();
-    }
-  });
+  form.first_name.focus(); // Focus le premier champs du formulaire
 }
 
 /**
- *Fonction pour fermer la modal
+ * Fonction permettant de masquer la modale de contact
  */
-function closeModal() {
-  modal.style.display = "none";
-  // Retirer l'écouteur d'événements pour la touche Échap
-  document.removeEventListener("keydown", closeModalOnEscape);
+function hideContactModal() {
+  const modal = document.getElementById("contact_modal");
+  const contactButton = document.querySelector('.contact_button')
+  modal.style.display = "none"; 
 
-  // Retirer l'écouteur d'événements pour la navigation cyclique
-  modal.removeEventListener("keydown", trapFocus);
+  contactButton.focus() //Permet de remettre le focus sur le bouton contact afin de permettre la suite de la navigation
 }
 
 /**
@@ -284,77 +238,41 @@ function closeModal() {
  */
 function closeModalOnEscape(event) {
   if (event.key === "Escape") {
-    closeModal();
+    hideContactModal();
   }
 }
 
 /**
- * Fonction pour gérer la navigation cyclique dans la modal
- * @param {KeyboardEvent} event - L'événement clavier
+ * Initialiser les évènements de la modal de contact
  */
+function initEventContactModal() {
+  const modal = document.getElementById("contact_modal");
 
-function trapFocus(event) {
-  const focusableElements = modal.querySelectorAll(
-    "input, textarea, button, img[onclick]"
-  );
-  const firstElement = focusableElements[0];
-  const lastElement = focusableElements[focusableElements.length - 1];
+  // Ajoutez un écouteur d'événements sur le bouton "Contactez-moi"
+  const contactButton = document.querySelector(".contact_button");  
+  contactButton.addEventListener("click", showContactModal);
 
-  if (event.key === "Tab") {
-    if (event.shiftKey) {
-      // Touche Maj+Tab
-      if (document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      // Touche Tab
-      if (document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
+
+  // Ajouter un écouteur d'événements pour fermer la modal lorsque la touche Échap est pressée
+  document.addEventListener("keydown", closeModalOnEscape);
+
+  // Mettre le focus sur le champ "Prénom"
+  document.getElementById("first_name").focus();
+
+  // Ajouter un gestionnaire d'événements pour la touche "Entrée" sur la croix de fermeture
+  const closeButton = document.querySelector('.close-contact-modal');
+  closeButton.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") {
+      hideContactModal();
     }
-  }
-}
+  });
 
-// Ajoutez un écouteur d'événements sur le bouton "Contactez-moi"
-contactButton.addEventListener("click", displayModal);
+  // Au click sur l'overlay, permet de fermer la modale
+  const contactOverlay = document.querySelector('.contact-overlay')
+  contactOverlay.addEventListener('click', () => {
+    hideContactModal()
+  })
 
-// Écouteur d'événements pour le menu déroulant, triant et mettant à jour
-// la galerie en fonction du critère sélectionné (popularité, titre, date).
-document.getElementById("sorting").addEventListener("change", function () {
-  sortMedia(this.value);
-});
-
-const sortMedia = (value) => {
-  if (value === "popularity") {
-    media.sort((a, b) => b.likes - a.likes);
-    sortingOption = "popularity";
-  } else if (value === "title") {
-    media.sort((a, b) => a.title.localeCompare(b.title));
-    sortingOption = "title";
-  } else if (value === "date") {
-    media.sort((a, b) => new Date(b.date) - new Date(a.date));
-    sortingOption = "date";
-  }
-  displayGallery(media);
-  displayTotalLikes(totalLikes(media));
-};
-
-// Ajout de la fonctionnalité de focus et de redirection pour le logo
-const homeLogo = document.getElementById("homeLogo");
-homeLogo.tabIndex = 0;
-homeLogo.setAttribute("role", "button");
-homeLogo.addEventListener("keypress", function (event) {
-  if (event.key === "Enter") {
-    window.location.href = "index.html";
-  }
-});
-
-/**
- * Fonction pour initialiser les événements du formulaire de contact
- */
-const initContactEvent = () => {
   const contactForm = document.querySelector("#contact-form");
   contactForm.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -362,8 +280,39 @@ const initContactEvent = () => {
     console.log("Last Name: ", e.target.last_name.value);
     console.log("Email: ", e.target.email.value);
     console.log("Message: ", e.target.message.value);
+    contactForm.reset()
+    hideContactModal()
   });
+}
+
+
+
+
+/**
+ * Trier le tableau de media en fonction de la valeur donnée
+ * @param {String} value 
+ */
+const sortMedia = (value) => {
+  if (value === "popularity") {
+    media.sort((a, b) => b.likes - a.likes);
+  } else if (value === "title") {
+    media.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (value === "date") {
+    media.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }
 };
+
+/**
+ * Fonction permettant d'initialiser les évènements du tri
+ */
+const initSortEvent = () => {
+    // Écouteur d'événements pour le menu déroulant, triant et mettant à jour
+  // la galerie en fonction du critère sélectionné (popularité, titre, date).
+  document.getElementById("sorting").addEventListener("change", function () {
+    sortMedia(this.value);
+    displayGallery(media);
+  });
+}
 
 /**
  * Fonction pour initialiser la page : récupère les médias et les informations du photographe, puis affiche la galerie et les informations
@@ -371,16 +320,24 @@ const initContactEvent = () => {
 
 const init = async () => {
   let params = new URL(document.location.toString()).searchParams;
-  let id = params.get("id");
-  media = await fetchMedia(parseInt(id));
-  lightbox = new Lightbox();
-  sortMedia("popularity");
+  let id = params.get("id"); // Identifiant que query de la requête
+
+  // On récupère d'abord les infos du photographe
   const photographer = await fetchPhotographer(parseInt(id));
   displayPhotographerInfo(photographer);
+  displayModal(photographer)
+  initEventContactModal()
+
+  // On récupère les médias du photographe
+  media = await fetchMedia(parseInt(id));
+  lightbox = new Lightbox();
+  initSortEvent()
+  sortMedia("popularity");
+  displayGallery(media);
+
   maxLikes = totalLikes(media);
   displayTotalLikes(maxLikes);
-  displayInfoWindow(maxLikes, photographer.price);
-  initContactEvent();
+  displayInfoWindow(maxLikes, photographer.price);  
 };
 
 /**
