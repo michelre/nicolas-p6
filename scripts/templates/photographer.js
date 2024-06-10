@@ -3,6 +3,7 @@
  * @param {Object} data - Les données du photographe
  * @returns {Object} - Un objet contenant le nom, l'image et la méthode pour obtenir le DOM de la carte utilisateur
  */
+/* eslint no-unused-vars: "off" */
 function photographerTemplate(data) {
   const { name, portrait, id } = data;
 

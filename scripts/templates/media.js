@@ -1,3 +1,4 @@
+/* eslint no-unused-vars: "off" */
 class Media {
   /**
    * Constructeur de la classe Media
@@ -36,10 +37,11 @@ class MediaImage {
    */
   getMediaDOM() {
     const image = document.createElement("img");
-    image.setAttribute(
+    image.setAttribute('alt', this.media.title)
+    /*image.setAttribute(
       "src",
       `assets/media/${this.media.photographerId}/${this.media.image}`
-    );
+    );*/
 
     return image;
   }
@@ -65,10 +67,10 @@ class MediaVideo {
     if (this.options && this.options.controls) {
       video.setAttribute("controls", "");
     }
-    src.setAttribute(
+    /*src.setAttribute(
       "src",
       `assets/media/${this.media.photographerId}/${this.media.video}`
-    );
+    );*/
     video.appendChild(src);
 
     return video;
